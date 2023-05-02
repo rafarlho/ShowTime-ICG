@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui'; 
+import Stats from 'three/examples/jsm/libs/stats.module'
 
 
 const renderer = new THREE.WebGL1Renderer();
@@ -17,7 +18,7 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(0,30,100);
 var targetPosition = new THREE.Vector3( 0, 150, -150 );
 camera.lookAt(targetPosition);
-orbit.update();
+
 
 
 
@@ -63,25 +64,17 @@ const options = {
     shadow:true,
 };
 
-
-
 createTheather();
 sunnyWeather();
-
-
-
-
-
-
-let step = 0;
+let stats = initStats();
 
 animate();
 function animate(time) {
+    orbit.update();
+    stats.update();
     requestAnimationFrame( animate );
     renderer.render(scene,camera);
 }
-
-
 
 //Sunny weather
 function sunnyWeather() {
@@ -362,3 +355,21 @@ function createWall(){
     plane_front.position.set(0,75,-150);
     scene.add(plane_front);
 }
+
+
+function initStats() {
+
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+        }
